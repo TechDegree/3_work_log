@@ -1,4 +1,6 @@
 import os
+import datetime
+import csv
 
 from task import Task # import Task class, so it is accessible here
 
@@ -17,7 +19,7 @@ def get_new_task():
     """Allows user to enter a task name, time spent, and optional notes.
 
     Returns:
-        [type] -- [description]
+        [Task] -- [returns an instance of a Task class]
     """
     name = None
     date = None
@@ -46,19 +48,31 @@ def get_new_task():
     # format: '2018/12/31'
     date = datetime.datetime.now().strftime('%Y/%m/%d')
 
-    print(name, time, notes, date)
-    return (name, time, notes, date)
+    new_task = Task(name=name,
+                    date=date,
+                    notes=notes,
+                    time=time)
+    return new_task
 
 
-get_new_task()
-
-def save_to_file():
-    """[summary]
-    
-    Returns:
-        [type] -- [description]
+def save_to_file(task):
+    """Saves task to a CSV file. Does not return anything.
     """
-    pass
+
+    # insert task into file
+    with open("tasks.csv", "a+", newline="") as taskfile:
+        fieldnames = ["name", "time", "notes", "date"]
+        writer = csv.DictWriter(taskfile, fieldnames=fieldnames)
+        
+        # write headers for a new file
+        if os.stat("tasks.csv").st_size == 0:
+            writer.writeheader()
+        # TODO: write header for an empty file
+
+        # save current task as a row
+        writer.writerow(task.as_dictionary())  
+        # calls as_dictionary() to get task data in a dictionary format,
+        # easy to save to a CSV file
 
 def view_tasks():
     """[summary]
@@ -111,8 +125,10 @@ def search_by_exact():
 
 
 def main():
-    pass
 
+    task = get_new_task()
+    save_to_file(task)
+    print(task.as_dictionary())
 
 if __name__ == "__main__":
     main()
