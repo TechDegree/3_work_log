@@ -86,6 +86,23 @@ def view_tasks(task):
     print(task)
 
 
+def view_results(list_of_ord_dict):
+    """[summary]
+    """
+    idx = 0 # start index for results
+    for odict in list_of_ord_dict:
+        idx += 1 
+        
+        print("Result {} of {}\n---------------".format(
+            idx,
+            len(list_of_ord_dict)
+        ))
+        
+
+        for key, value in odict.items():
+            print("{} - {} ".format(key, value))
+        print("")
+
 # SEARCH SECTION
 def search_by_date():
     """[summary]
@@ -132,7 +149,7 @@ def search_by_time():
         try_again = input("")
     else:
         print(search_results) # ordered Dict
-        # make a view results function for all types of results
+        view_results(search_results)# make a view results function for all types of results
 
 
 def search_by_pattern():
@@ -181,9 +198,8 @@ def run_main_menu(main_menu):
             choice = None
         else:
             clear()
-            print("""This is not an option.
-(A)dd a new task. (S)each task. (Q)uit. (M)enu.
-""")
+            print("This is not an option.\n" \
+                + "(A)dd a new task. (S)each task. (Q)uit. (M)enu.")
             choice = None
 
 
