@@ -4,7 +4,7 @@ import csv
 import sys
 
 from task import Task # import Task class, so it is accessible here
-from helpers import menu, welcome # import program text and flow messages
+from helpers import main_menu, welcome  # import program text and flow messages
 
 def clear():
     """Clears console."""
@@ -12,7 +12,7 @@ def clear():
 
 
 def display_menu(menu):
-    """Displays worklog menu"""
+    """Prints out the main menu to stdout"""
     print(menu)
     
 
@@ -78,6 +78,7 @@ def save_to_file(task):
         # calls as_dictionary() to get task data in a dictionary format,
         # easy to save to a CSV file
 
+
 def view_tasks(task):
     """Prints task to stdout. Does not return anything.
     """
@@ -100,6 +101,38 @@ def search_by_time():
     Returns:
         [type] -- [description]
     """
+    search_time = None
+    search_results = []
+    clear()
+    print("Enter task time. Integers only.")
+    while search_time == None:
+        search_time = input(">>> ")
+        # check if it is an integer, if not
+        # complain
+        # if it is, turn into string :) since
+        # it comes as string from CSV :)
+        try:
+            search_time = int(search_time)
+        except ValueError:
+            clear()
+            print("Only integers are allowed.")
+            search_time = None
+        else:
+            search_time = str(search_time)
+
+    with open("tasks.csv") as csvfile:
+        task_reader = csv.DictReader(csvfile)
+        for row in task_reader:
+            if row["time"] == search_time:
+                search_results.append(row)
+    
+    if len(search_results) == 0:
+        clear()
+        print("No tasks match that data")
+        try_again = input("")
+    else:
+        print(search_results) # ordered Dict
+        # make a view results function for all types of results
 
 
 def search_by_pattern():
@@ -118,8 +151,8 @@ def search_by_exact():
     """
 
 
-def run_menu(menu):
-    print(menu)
+def run_main_menu(main_menu):
+    print(main_menu)
     
     choice = None
     
@@ -128,12 +161,13 @@ def run_menu(menu):
         if choice.lower() == 'a': # enter new task
             task = get_new_task()
             clear()
-            print("Your task was added. Here it is:")
+            save_to_file(task)
+            print("Your task was added. Here it is:\n")
             view_tasks(task)
             choice = input("Would you like to do something else? [Y/N]\n>>> ")
             if choice.lower() == "y":
                 clear()
-                print(menu)
+                print(main_menu)
                 choice = None
             else:
                 sys.exit(0)
@@ -143,7 +177,7 @@ def run_menu(menu):
             sys.exit(0)
         elif choice.lower() == 'm':
             clear()
-            print(menu)
+            print(main_menu)
             choice = None
         else:
             clear()
@@ -162,7 +196,8 @@ def run_menu(menu):
 
 def main():
     clear() # clear terminal from all the stuff that was there
-    run_menu(menu)
+    #run_main_menu(main_menu)
+    search_by_time()
 
 if __name__ == "__main__":
     main()
