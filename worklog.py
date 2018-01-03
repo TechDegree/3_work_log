@@ -1,18 +1,19 @@
 import os
 import datetime
 import csv
+import sys
 
 from task import Task # import Task class, so it is accessible here
-
+from helpers import menu, welcome # import program text and flow messages
 
 def clear():
     """Clears console."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def display_menu():
+def display_menu(menu):
     """Displays worklog menu"""
-    pass
+    print(menu)
     
 
 def get_new_task():
@@ -28,16 +29,19 @@ def get_new_task():
 
     # get Task name and time
     while not name or name.isspace():
+        clear()
         # is none or white space (ENTER is a white space too)
-        name = input('Enter task name or press (q) to quit.\n>>>')
+        name = input('Enter task name or press (q) to quit.\n>>> ')
         if name.lower() == 'q':
             sys.exit(0)
     while not time:
+        clear()
         try:
-            time = int(input('Enter time spent on task (in min).\n>>>'))
+            time = int(input('Enter time spent on task (in min).\n>>> '))
         except ValueError:
+            clear()
             print("Please only enter an integer.")
-
+    clear()
     # get task notes
     notes = input(
         "Enter notes about the task (optional). Pres ENTER to skip.\n>>>")
@@ -74,14 +78,14 @@ def save_to_file(task):
         # calls as_dictionary() to get task data in a dictionary format,
         # easy to save to a CSV file
 
-def view_tasks():
-    """[summary]
-
-    Returns:
-        [type] -- [description]
+def view_tasks(task):
+    """Prints task to stdout. Does not return anything.
     """
-    pass
 
+    print(task)
+
+
+# SEARCH SECTION
 def search_by_date():
     """[summary]
     
@@ -114,7 +118,39 @@ def search_by_exact():
     """
 
 
-
+def run_menu(menu):
+    print(menu)
+    
+    choice = None
+    
+    while not choice:
+        choice = input('>>> ')
+        if choice.lower() == 'a': # enter new task
+            task = get_new_task()
+            clear()
+            print("Your task was added. Here it is:")
+            view_tasks(task)
+            choice = input("Would you like to do something else? [Y/N]\n>>> ")
+            if choice.lower() == "y":
+                clear()
+                print(menu)
+                choice = None
+            else:
+                sys.exit(0)
+        elif choice.lower() == 's': # search tasks
+            pass
+        elif choice.lower() == 'q':
+            sys.exit(0)
+        elif choice.lower() == 'm':
+            clear()
+            print(menu)
+            choice = None
+        else:
+            clear()
+            print("""This is not an option.
+(A)dd a new task. (S)each task. (Q)uit. (M)enu.
+""")
+            choice = None
 
 
 
@@ -125,10 +161,8 @@ def search_by_exact():
 
 
 def main():
-
-    task = get_new_task()
-    save_to_file(task)
-    print(task.as_dictionary())
+    clear() # clear terminal from all the stuff that was there
+    run_menu(menu)
 
 if __name__ == "__main__":
     main()

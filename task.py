@@ -67,10 +67,18 @@ Date       - {}
         }
         return csv_dictionary
 
+    # Search functionality
+    def find_by_date(self, date):
+        return self.date == date
+
+    def find_by_time(self, time):
+        return self.time == time
+
+    def find_by_exact(self, string):
+        return self.name == string or self.notes == string
 
 
 
-
-n = Task(143,2000000004,3765,47899)
-print(n)
-print(n.as_dictionary())
+# n = Task(143,2000000004,3765,47899)
+# print(n)
+# print(n.as_dictionary())
