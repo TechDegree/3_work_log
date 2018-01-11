@@ -7,6 +7,11 @@ import re
 from task import Task  # import Task class, so it is accessible here
 from helpers import main_menu, welcome  # import script text stuff
 
+# TODO: remove from adding task and all others
+# def quit_now(answer):
+#     if answer.lower() == "q":
+#         sys.exit()
+
 
 def clear():
     """Clears console."""
@@ -273,30 +278,27 @@ def search_by_exact():
 
 
 def run_main_menu(menu_text):
+    print(welcome)
     print(menu_text)
 
     choice = None
 
     while not choice:
         choice = input('>>> ')
-        if choice.lower() == 'a':  # enter new task
+        # enter new task (a) for ADD and (y) for yes in 2nd loop)
+        if choice.lower() == 'a' or choice.lower() == "y":
             task = get_new_task()
             clear()
             save_to_file(task)
             print("Your task was added. Here it is:\n")
             view_tasks(task)
-            choice = input("Would you like to do something else? [Y/N]\n>>> ")
-            if choice.lower() == "y":
-                clear()
-                print(menu_text)
-                choice = None
-            else:
-                sys.exit(0)
-        elif choice.lower() == 's':  # search tasks
+            print("Add something else?\nY/N Q(uit)/M(enu)]")
+            choice = None
+        elif choice.lower() == "q":
+            sys.exit()
+        elif choice.lower() == 's':
             pass
-        elif choice.lower() == 'q':
-            sys.exit(0)
-        elif choice.lower() == 'm':
+        elif choice.lower() == 'm' or choice.lower() == "n":
             clear()
             print(menu_text)
             choice = None
@@ -309,11 +311,7 @@ def run_main_menu(menu_text):
 
 def main():
     clear()  # clear terminal from all the stuff that was there
-    #run_main_menu(main_menu)
-    #search_by_time()
-    # search_by_date()
-    # search_by_pattern()
-    search_by_exact()
+    run_main_menu(main_menu)
 
 
 if __name__ == "__main__":
