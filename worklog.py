@@ -5,7 +5,7 @@ import sys
 import re
 
 from task import Task  # import Task class, so it is accessible here
-from helpers import main_menu, welcome  # import script text stuff
+from helpers import main_menu, welcome, search_menu  # import script text stuff
 
 # TODO: remove from adding task and all others
 # def quit_now(answer):
@@ -297,7 +297,17 @@ def run_main_menu(menu_text):
         elif choice.lower() == "q":
             sys.exit()
         elif choice.lower() == 's':
-            pass
+            clear()
+            display_menu(search_menu)
+            search_by = input(">>> ")
+            if search_by.lower() == "d":
+                search_by_date()
+            elif search_by.lower() == "t":
+                search_by_time()
+            elif search_by.lower() == "e":
+                search_by_exact()
+            elif search_by.lower() == "r":
+                search_by_pattern()
         elif choice.lower() == 'm' or choice.lower() == "n":
             clear()
             print(menu_text)
