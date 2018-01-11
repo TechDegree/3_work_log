@@ -3,5 +3,6 @@
         "Jasker",
         "Orderd",
         "odict"
-    ]
+    ],
+    "python.pythonPath": "/usr/bin/python3"
 }
