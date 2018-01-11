@@ -2,9 +2,10 @@ import os
 import datetime
 import csv
 import sys
+import re
 
 from task import Task  # import Task class, so it is accessible here
-from helpers import main_menu, welcome # import script text stuff
+from helpers import main_menu, welcome  # import script text stuff
 
 
 def clear():
@@ -185,14 +186,90 @@ def search_by_pattern():
     Returns:
         [type] -- [description]
     """
+    search_regex = None
+    search_results = []
+    clear()
+    print("Enter your regex. Input the pattern part only: r\"pattern\".")
+    # input() gets data as raw string and does not have to be r""-ed
+    while search_regex is None:
+        search_regex = input(">>> ")
+        # check if it is an integer, if not
+        # complain
+        # if it is, turn into string :) since
+        # it comes as string from CSV :)
+        search_this = re.compile(search_regex)
+
+    with open("tasks.csv") as csvfile:
+        task_reader = csv.DictReader(csvfile)
+        for row in task_reader:
+            name = row["name"]
+            time = row["time"]
+            notes = row["notes"]
+            date = row["date"]
+            # do not join string
+            # joining string would create edge cases that do not actually exist
+
+            if search_this.findall(name) != []:
+                search_results.append(row)
+            elif search_this.findall(time) != []:
+                search_results.append(row)
+            elif search_this.findall(notes) != []:
+                search_results.append(row)
+            elif search_this.findall(date) != []:
+                search_results.append(row)
+
+    if len(search_results) == 0:
+        clear()
+        print("No tasks match that pattern")
+        # return False to try_again = input("") ?
+    else:
+        # print(search_results)  # ordered Dict
+        view_results(search_results)  # view results func4all types of results
 
 
 def search_by_exact():
-    """[summary]
+    """Searches for exact words in title or notes. No partial matches.
+    Case insensitive. Does not search for phrases.
+    search_by_pattern() can do that.
 
-    Returns:
-        [type] -- [description]
+    example text: "This is example text"
+    matches:
+        * this
+        * IS
+        * TeXT
+    does not match:
+        * ex
+        * pl
     """
+    search_exact = None
+    search_results = []
+    clear()
+    print("Enter search word.")
+    while search_exact is None:
+        search_exact = input(">>> ")
+
+        if len(search_exact.split()) > 1:
+            search_exact = None
+            clear()
+            print("You can search using only one word.")
+
+    with open("tasks.csv") as csvfile:
+        task_reader = csv.DictReader(csvfile)
+        for row in task_reader:
+            string = row["name"].lower().split()
+            string += row["notes"].lower().split()
+            # each word is separe in the list
+            # they can be combined
+            if search_exact.lower() in string:
+                search_results.append(row)
+
+    if len(search_results) == 0:
+        clear()
+        print("No tasks match that pattern")
+        # return False to try_again = input("") ?
+    else:
+        # print(search_results)  # ordered Dict
+        view_results(search_results)  # view results func4all types of results
 
 
 def run_main_menu(menu_text):
@@ -234,7 +311,9 @@ def main():
     clear()  # clear terminal from all the stuff that was there
     #run_main_menu(main_menu)
     #search_by_time()
-    search_by_date()
+    # search_by_date()
+    # search_by_pattern()
+    search_by_exact()
 
 
 if __name__ == "__main__":
