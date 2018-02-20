@@ -12,3 +12,11 @@ Here are your options:
 (q) - Quit Jasker
 
 """
+
+search_menu = """You can search in a few ways:
+(d) - Search by DATE logged
+(t) - Search by TIME taken
+(e) - Search by EXACT word 
+(r) - Search by REGEX pattern
+
+"""
