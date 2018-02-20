@@ -184,7 +184,12 @@ def search_by_pattern():
     # input() gets data as raw string and does not have to be r""-ed
     while search_regex is None:
         search_regex = input(">>> ")
-        search_this = re.compile(search_regex)
+        try:
+            search_this = re.compile(search_regex)
+            print(search_this)
+        except re.error:
+            search_regex = None
+            print("This is not a valid regex pattern. Please try again.")
 
     with open("tasks.csv") as csvfile:
         task_reader = csv.DictReader(csvfile)
