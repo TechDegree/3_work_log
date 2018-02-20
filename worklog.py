@@ -107,7 +107,7 @@ def view_results(list_of_ord_dict):
         for key, value in odict.items():
             print("{} - {} ".format(key, value))
         print("")
-
+    return True
 
 # SEARCH SECTION
 def search_by_date():
@@ -140,10 +140,11 @@ def search_by_date():
         clear()
         print("No tasks match that date")
         # try_again = input("")
+        return False
     else:
         print(search_results)  # ordered Dict
         view_results(search_results)  # view results func4all types of results
-
+        return True
 
 def search_by_time():
     """[summary]
@@ -180,10 +181,11 @@ def search_by_time():
         clear()
         print("No tasks match that data")
         # try_again = input("")
+        return False
     else:
         print(search_results)  # ordered Dict
         view_results(search_results)  # view results func4all types of results
-
+        return True
 
 def search_by_pattern():
     """[summary]
@@ -227,10 +229,11 @@ def search_by_pattern():
         clear()
         print("No tasks match that pattern")
         # return False to try_again = input("") ?
+        return False
     else:
         # print(search_results)  # ordered Dict
         view_results(search_results)  # view results func4all types of results
-
+        return True
 
 def search_by_exact():
     """Searches for exact words in title or notes. No partial matches.
@@ -272,9 +275,11 @@ def search_by_exact():
         clear()
         print("No tasks match that pattern")
         # return False to try_again = input("") ?
+        return False
     else:
         # print(search_results)  # ordered Dict
         view_results(search_results)  # view results func4all types of results
+        return True
 
 
 def run_main_menu(menu_text):
@@ -297,17 +302,49 @@ def run_main_menu(menu_text):
         elif choice.lower() == "q":
             sys.exit()
         elif choice.lower() == 's':
-            clear()
-            display_menu(search_menu)
-            search_by = input(">>> ")
-            if search_by.lower() == "d":
-                search_by_date()
-            elif search_by.lower() == "t":
-                search_by_time()
-            elif search_by.lower() == "e":
-                search_by_exact()
-            elif search_by.lower() == "r":
-                search_by_pattern()
+            while True:
+                clear()
+                display_menu(search_menu)
+                search_by = input(">>> ")
+                found = False
+
+                if search_by.lower() == "d":
+                    found = search_by_date()
+                elif search_by.lower() == "t":
+                    found = search_by_time()
+                elif search_by.lower() == "e":
+                    found = search_by_exact()
+                elif search_by.lower() == "r":
+                    found = search_by_pattern()
+                elif search_by.lower() == "q":
+                    sys.exit()
+                elif search_by.lower() == "m":
+                    clear()
+                    print(menu_text)
+                    choice = None
+                    break  # break search loop, go to next menu loop
+                else:
+                    continue
+
+                # only show if found
+                if found:
+                    print("I hope you like what you found.")
+                # always show, found or else:
+                next = input("You can (S)each again."
+                             " Display (M)enu. (Q)uit.\n>>> ")
+
+                if next.lower() == "q":
+                    sys.exit()
+                elif next.lower() == "m":
+                    clear()
+                    print(menu_text)
+                    choice = None
+                    break  # break search loop, go to next menu loop
+                elif next.lower() == "s":
+                    continue
+                else:
+                    next = input("(S)each. Display (M)enu. (Q)uit.\n>>> ")
+
         elif choice.lower() == 'm' or choice.lower() == "n":
             clear()
             print(menu_text)
