@@ -188,8 +188,10 @@ def search_by_pattern():
             search_this = re.compile(search_regex)
             print(search_this)
         except re.error:
+            clear()
+            print("r\"{}\" is not a valid regex pattern."
+                  " Please try again.".format(search_regex))
             search_regex = None
-            print("This is not a valid regex pattern. Please try again.")
 
     with open("tasks.csv") as csvfile:
         task_reader = csv.DictReader(csvfile)
