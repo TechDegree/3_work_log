@@ -7,11 +7,6 @@ import re
 from task import Task  # import Task class, so it is accessible here
 from helpers import main_menu, welcome, search_menu  # import script text stuff
 
-# TODO: remove from adding task and all others
-# def quit_now(answer):
-#     if answer.lower() == "q":
-#         sys.exit()
-
 
 def clear():
     """Clears console."""
@@ -24,11 +19,7 @@ def display_menu(menu):
 
 
 def get_new_task():
-    """Allows user to enter a task name, time spent, and optional notes.
-
-    Returns:
-        [Task] -- [returns an instance of a Task class]
-    """
+    """Allows user to enter a task name, time spent, and optional notes."""
     name = None
     date = None
     notes = None
@@ -67,8 +58,7 @@ def get_new_task():
 
 
 def save_to_file(task):
-    """Saves task to a CSV file. Does not return anything.
-    """
+    """Saves task to a CSV file. Does not return anything."""
 
     # insert task into file
     with open("tasks.csv", "a+", newline="") as taskfile:
@@ -87,14 +77,12 @@ def save_to_file(task):
 
 
 def view_tasks(task):
-    """Prints task to stdout. Does not return anything.
-    """
-
+    """Prints task to stdout. Does not return anything."""
     print(task)
 
 
 def view_results(list_of_ord_dict):
-    """[summary]
+    """Display results to stdout
     """
     idx = 0  # start index for results
     for odict in list_of_ord_dict:
@@ -107,14 +95,12 @@ def view_results(list_of_ord_dict):
         for key, value in odict.items():
             print("{} - {} ".format(key, value))
         print("")
-    return True
+
 
 # SEARCH SECTION
 def search_by_date():
-    """[summary]
-
-    Returns:
-        [type] -- [description]
+    """Searches and displays task logged on a given date
+    Returns True if there were task. False if not.
     """
     search_date = None
     search_results = []
@@ -146,11 +132,10 @@ def search_by_date():
         view_results(search_results)  # view results func4all types of results
         return True
 
-def search_by_time():
-    """[summary]
 
-    Returns:
-        [type] -- [description]
+def search_by_time():
+    """Searches and displays task that took given time
+    Returns True if there were task. False if not.
     """
     search_time = None
     search_results = []
@@ -187,11 +172,10 @@ def search_by_time():
         view_results(search_results)  # view results func4all types of results
         return True
 
-def search_by_pattern():
-    """[summary]
 
-    Returns:
-        [type] -- [description]
+def search_by_pattern():
+    """Searches using regex pattern
+    Returns True if there were task. False if not.
     """
     search_regex = None
     search_results = []
@@ -200,10 +184,6 @@ def search_by_pattern():
     # input() gets data as raw string and does not have to be r""-ed
     while search_regex is None:
         search_regex = input(">>> ")
-        # check if it is an integer, if not
-        # complain
-        # if it is, turn into string :) since
-        # it comes as string from CSV :)
         search_this = re.compile(search_regex)
 
     with open("tasks.csv") as csvfile:
@@ -235,6 +215,7 @@ def search_by_pattern():
         view_results(search_results)  # view results func4all types of results
         return True
 
+
 def search_by_exact():
     """Searches for exact words in title or notes. No partial matches.
     Case insensitive. Does not search for phrases.
@@ -248,6 +229,7 @@ def search_by_exact():
     does not match:
         * ex
         * pl
+    Returns True if there were task. False if not.
     """
     search_exact = None
     search_results = []
