@@ -1,8 +1,4 @@
 # project specyfic and temps
-helpers.py
-requirements.py
-run.py
-tasks.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
